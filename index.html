@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Untukmu yang Tak Sempat Kumiliki - Novel Interaktif</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0b0d14',
+                        cardBg: '#151824',
+                        cardBorder: '#232738',
+                        accentRed: '#ff4d6d',
+                        accentGreen: '#10b981',
+                        accentPurple: '#8b5cf6'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Georgia', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0b0d14;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        .title-font {
+            font-family: 'Cinzel', serif;
+        }
+        .story-font {
+            font-family: 'Lora', serif;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0d14;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #232738;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #374151;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-start pb-12 px-3 sm:px-4">
+
+    <div class="w-full max-w-xl mx-auto pt-6 flex flex-col items-center">
+        
+        <!-- Top Genre Badges/Pills -->
+        <div class="flex flex-wrap justify-center gap-2 mb-6 text-xs sm:text-sm font-medium">
+            <span class="px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-purple-900/50 text-purple-300 shadow-sm">Novel Romantis</span>
+            <span class="px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-purple-900/50 text-purple-300 shadow-sm">Cinta & Takdir</span>
+            <span class="px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-purple-900/50 text-purple-300 shadow-sm">Sad Romance</span>
+            <span class="px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-purple-900/50 text-purple-300 shadow-sm">Slice of Life</span>
+        </div>
+
+        <!-- Novel Main Title & Author Info -->
+        <div class="text-center mb-6 px-2">
+            <h1 class="title-font text-2xl sm:text-4xl font-extrabold tracking-wide text-white leading-snug sm:leading-tight uppercase mb-3 drop-shadow-md">
+                UNTUKMU YANG TAK SEMPAT KUMILIKI
+            </h1>
+            <p class="text-slate-300 text-sm sm:text-base italic mb-3">
+                Karya: <span class="font-semibold underline underline-offset-4 decoration-rose-500 text-white">JalonStarboy</span>
+            </p>
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-950/40 border border-rose-800/50 text-rose-300 text-xs sm:text-sm font-medium">
+                <i class="fa-solid fa-heart text-rose-500 text-xs"></i>
+                <span>Tokoh Utama: <strong>Rizal & Aisyah</strong></span>
+            </div>
+        </div>
+
+        <!-- Control Action Bar Container (Identical to User Reference Image) -->
+        <div class="w-full bg-cardBg border border-cardBorder rounded-2xl p-3 sm:p-4 mb-5 shadow-xl">
+            <!-- Row 1: Main Action Buttons -->
+            <div class="grid grid-cols-12 gap-2 mb-3">
+                <!-- Daftar Isi Button (Red Active Glow) -->
+                <button id="btnDaftarIsi" onclick="toggleDrawer()" class="col-span-5 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-semibold py-3 px-3 rounded-xl flex items-center justify-center gap-2.5 shadow-lg shadow-rose-950/40 transition active:scale-95">
+                    <i class="fa-solid fa-list-ul text-lg"></i>
+                    <span class="text-sm sm:text-base">Daftar Isi</span>
+                </button>
+
+                <!-- Bookmark Button -->
+                <button onclick="toggleBookmark()" id="btnBookmark" class="col-span-2 bg-[#1c2030] hover:bg-[#252a3f] text-slate-300 border border-cardBorder rounded-xl flex items-center justify-center transition active:scale-95" title="Tandai Halaman">
+                    <i id="bookmarkIcon" class="fa-regular fa-bookmark text-lg"></i>
+                </button>
+
+                <!-- Font Size Scaling Controls -->
+                <div class="col-span-5 bg-[#1c2030] border border-cardBorder rounded-xl flex items-center justify-between px-3 py-1 text-xs sm:text-sm font-semibold text-slate-200">
+                    <button onclick="changeFontSize(-10)" class="hover:text-rose-400 p-1 transition" title="Kecilkan Font">A-</button>
+                    <span id="fontSizeDisplay" class="text-slate-400 font-mono text-xs">100%</span>
+                    <button onclick="changeFontSize(10)" class="hover:text-rose-400 p-1 transition" title="Besarkan Font">A+</button>
+                </div>
+            </div>
+
+            <!-- Row 2: Secondary Utilities + Prominent Download Button -->
+            <div class="grid grid-cols-12 gap-2">
+                <!-- Small Utility Icons -->
+                <div class="col-span-5 bg-[#1c2030] border border-cardBorder rounded-xl flex items-center justify-around px-2 py-2 text-slate-400">
+                    <button onclick="openSettings()" class="hover:text-white transition p-1" title="Pengaturan"><i class="fa-solid fa-gear"></i></button>
+                    <button onclick="toggleReaderMode()" class="hover:text-white transition p-1" title="Mode Baca Fokus"><i class="fa-solid fa-book-open"></i></button>
+                    <button onclick="toggleTheme()" class="hover:text-white transition p-1" title="Ganti Tema"><i class="fa-solid fa-moon text-rose-400"></i></button>
+                </div>
+
+                <!-- Green Download Button -->
+                <button onclick="downloadNovelModal()" class="col-span-7 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/30 transition active:scale-95">
+                    <i class="fa-solid fa-download text-base"></i>
+                    <span class="text-sm">Download</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Alert Info Banner Box -->
+        <div id="alertBanner" class="w-full bg-cardBg border border-cardBorder rounded-2xl p-4 mb-6 relative shadow-lg">
+            <button onclick="closeAlert()" class="absolute top-3 right-3 text-slate-500 hover:text-slate-300 transition text-sm p-1">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="flex items-start gap-3 pr-6">
+                <div class="w-8 h-8 rounded-full bg-rose-500/20 text-rose-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <i class="fa-solid fa-circle-info text-base"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white text-sm mb-1">Selamat Membaca!</h4>
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                        Gunakan tombol <strong class="text-rose-400 font-semibold">Daftar Isi</strong> di atas untuk berpindah bab. Anda juga dapat mengklik tombol <strong class="text-emerald-400 font-semibold">Download</strong> untuk menyimpan novel ini dan membacanya secara offline tanpa koneksi internet.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Novel Reader Screen -->
+        <main id="readerContainer" class="w-full bg-cardBg border border-cardBorder rounded-2xl p-5 sm:p-8 shadow-2xl relative transition-all duration-300">
+            <!-- Header Chapter Info -->
+            <div class="border-b border-cardBorder pb-4 mb-6">
+                <div class="text-xs font-semibold uppercase tracking-wider text-rose-400 mb-1" id="currentSectionTitle">
+                    BAGIAN I — AWAL DARI SEGALANYA
+                </div>
+                <h2 class="text-xl sm:text-2xl font-bold text-white font-serif" id="currentChapterTitle">
+                    Bab 1 — Gadis di Antara Keramaian
+                </h2>
+            </div>
+
+            <!-- Chapter Content Body -->
+            <div id="chapterContent" class="story-font text-slate-300 leading-relaxed text-base sm:text-lg space-y-4 text-justify">
+                <!-- Content injected dynamically via JS -->
+            </div>
+
+            <!-- Chapter End Quote Box (Visible on Chapter 35) -->
+            <div id="quoteBox" class="hidden mt-8 p-5 bg-gradient-to-br from-rose-950/40 to-purple-950/40 border border-rose-500/30 rounded-xl text-center">
+                <p class="text-xs uppercase tracking-widest text-rose-400 font-bold mb-2">Inti Novel</p>
+                <p class="italic text-slate-200 text-sm sm:text-base leading-relaxed story-font">
+                    “Aisyah, jika suatu hari kamu bertanya siapa yang pernah mencintaimu dengan tulus, mungkin namaku tidak akan pernah kamu sebut. Namun, aku akan selalu mengingatmu sebagai seseorang yang pernah membuatku percaya bahwa kebahagiaan bisa sesederhana melihat satu nama muncul di layar ponselku.” ❤️
+                </p>
+            </div>
+
+            <!-- Bottom Chapter Navigation Controls -->
+            <div class="border-t border-cardBorder pt-6 mt-8 flex items-center justify-between gap-2">
+                <button id="btnPrevChapter" onclick="navigateChapter(-1)" class="px-4 py-2.5 rounded-xl bg-[#1c2030] hover:bg-slate-800 text-slate-300 text-xs sm:text-sm font-medium flex items-center gap-2 border border-cardBorder transition disabled:opacity-30 disabled:cursor-not-allowed">
+                    <i class="fa-solid fa-chevron-left"></i> Bab Sebelumnya
+                </button>
+                <span id="chapterIndicator" class="text-xs text-slate-400 font-mono">1 / 35</span>
+                <button id="btnNextChapter" onclick="navigateChapter(1)" class="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-medium flex items-center gap-2 transition disabled:opacity-30 disabled:cursor-not-allowed">
+                    Bab Selanjutnya <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+        </main>
+
+        <!-- Footer Info -->
+        <footer class="mt-8 text-center text-xs text-slate-500">
+            <p>© 2026 Jalon Starboy. Semua Hak Cipta Dilindungi.</p>
+            <p class="mt-1">Tidak semua orang yang kita cintai ditakdirkan untuk kita miliki.</p>
+        </footer>
+    </div>
+
+    <!-- Sliding Side Drawer / Modal for "Daftar Isi" -->
+    <div id="drawerOverlay" onclick="toggleDrawer()" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 hidden transition-opacity"></div>
+    <div id="drawerContent" class="fixed top-0 left-0 bottom-0 w-full max-w-md bg-[#0f121d] border-r border-cardBorder z-50 transform -translate-x-full transition-transform duration-300 flex flex-col">
+        <!-- Drawer Header -->
+        <div class="p-4 border-b border-cardBorder flex items-center justify-between bg-cardBg">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-book-bookmark text-rose-500"></i>
+                <h3 class="font-bold text-white text-lg">Daftar Isi (35 Bab)</h3>
+            </div>
+            <button onclick="toggleDrawer()" class="text-slate-400 hover:text-white p-2 text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Drawer Body List -->
+        <div id="drawerList" class="flex-1 overflow-y-auto p-4 space-y-4">
+            <!-- Dynamic Sections & Chapters injected by JS -->
+        </div>
+    </div>
+
+    <!-- Modal Download Options -->
+    <div id="downloadModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-cardBg border border-cardBorder rounded-2xl p-6 w-full max-w-sm text-center shadow-2xl">
+            <div class="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
+                <i class="fa-solid fa-cloud-arrow-down"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Unduh Novel Lengkap</h3>
+            <p class="text-xs text-slate-400 mb-6">Pilih format unduhan untuk menyimpan seluruh 35 bab novel ini ke perangkat Anda agar dapat dibaca offline.</p>
+            
+            <div class="space-y-3">
+                <button onclick="downloadAsHTML()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 transition">
+                    <i class="fa-solid fa-file-code"></i> Unduh Format Web (HTML)
+                </button>
+                <button onclick="downloadAsTXT()" class="w-full bg-[#1c2030] hover:bg-slate-800 text-slate-200 font-semibold py-2.5 rounded-xl border border-cardBorder flex items-center justify-center gap-2 transition">
+                    <i class="fa-solid fa-file-lines"></i> Unduh Format Teks (.TXT)
+                </button>
+            </div>
+            
+            <button onclick="closeDownloadModal()" class="mt-5 text-xs text-slate-400 hover:text-white transition">
+                Batal
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript Data & Logic -->
+    <script>
+        // Novel Structure Data
+        const novelData = [
+            {
+                section: "BAGIAN I — AWAL DARI SEGALANYA",
+                desc: "Tentang pertemuan sederhana yang diam-diam mengubah hidup seseorang.",
+                chapters: [
+                    {
+                        num: 1,
+                        title: "Bab 1 — Gadis di Antara Keramaian",
+                        content: `Di tengah hiruk-pikuk kafe sore itu, di mana riuh percakapan orang-orang bercampur dengan denting cangkir kopi, Rizal pertama kali melihatnya. Gadis itu duduk di dekat jendela, memegang buku sampul cokelat dengan satu cangkir teh hangat yang mengepul di depannya.<br><br>Sinar matahari senja menerpa rambutnya, menciptakan efek keemasan yang menawan. Rizal tidak pernah percaya pada kiasan "waktu berhenti saat bertemu seseorang", tetapi detik itu, ia ragu. Ada ketenangan yang bertolak belakang dengan keramaian di sekitarnya.<br><br>Rizal tidak pernah menyangka bahwa gadis sederhana dengan senyum tipis itu kelak akan menjadi seseorang yang begitu berarti—dan paling sulit ia lepaskan dalam hidupnya.`
+                    },
+                    {
+                        num: 2,
+                        title: "Bab 2 — Namamu yang Mulai Kuingat",
+                        content: `Pertemuan tak sengaja itu berulang. Sebuah buku yang terjatuh di perpustakaan kota menjadi alasan pertukaran nama yang canggung.<br><br>"Aisyah," ucap gadis itu lembut sambil merapikan hijabnya.<br><br>"Rizal," jawabnya singkat, berusaha menyembunyikan detak jantungnya yang mendadak tidak beratur. Percakapan singkat tentang buku berkembang menjadi obrolan panjang tentang selera musik, hobi, hingga makanan favorit. Hari itu, nama 'Aisyah' secara resmi tersimpan bukan hanya di kontak ponsel Rizal, melainkan di benaknya.`
+                    },
+                    {
+                        num: 3,
+                        title: "Bab 3 — Senyum yang Membuatku Tinggal",
+                        content: `Ada sesuatu dari senyum Aisyah yang sulit dijelaskan Rizal dengan kata-kata. Senyum itu bukan sekadar lengkungan bibir biasa, melainkan seperti tempat pulang bagi Rizal yang sering merasa terasing di kota besar ini.<br><br>Setiap kali Aisyah tertawa kecil karena cerita bodoh yang disampaikan Rizal, Rizal merasa usahanya hari itu terbayar tuntas. Ia mendapati dirinya sengaja tinggal lebih lama di tempat mereka biasa berkumpul hanya demi melihat senyum itu sekali lagi.`
+                    },
+                    {
+                        num: 4,
+                        title: "Bab 4 — Percakapan Sampai Tengah Malam",
+                        content: `Layar ponsel yang menyala di kegelapan kamar menjadi saksi kedekatan mereka. Notifikasi pesan singkat berubah menjadi panggilan suara yang berlangsung hingga larut malam.<br><br>Dari pembicaraan ringan tentang hari yang melelahkan, hingga rahasia dan ketakutan terbesar masa kecil mereka diungkapkan. Mereka saling berbagi impian yang belum pernah diceritakan kepada siapa pun. Keheningan di antara percakapan tidak terasa canggung lagi.`
+                    },
+                    {
+                        num: 5,
+                        title: "Bab 5 — Aku Mulai Menyukaimu",
+                        content: `Rizal terbangun suatu pagi dan menyadari satu hal: ia merindukan Aisyah saat gadis itu tidak ada. Perasaan itu tumbuh tanpa permisi, merayap pelan di sela-sela perhatian kecil mereka.<br><br>Namun, bersamaan dengan timbulnya rasa cinta itu, hadir pula rasa takut. Rizal takut jika pengakuannya akan mengubah dinamika hubungan manis ini. Bagaimana jika Aisyah hanya menganggapnya teman? Ketakutan itu membendung keberaniannya.`
+                    },
+                    {
+                        num: 6,
+                        title: "Bab 6 — Perhatian Kecil Bernama Cinta",
+                        content: `Cinta bagi Rizal saat ini bukan tentang pernyataan megah atau hadiah mahal. Cinta adalah mengingat bahwa Aisyah tidak suka minuman yang terlalu manis, bahwa Aisyah selalu cemas saat hujan deras bertiup, dan menyediakannya payung sebelum ia meminta.<br><br>Melihat Aisyah tersenyum lega saat menerima bantuan kecil itu sudah cukup membuat hari Rizal terasa sempurna.`
+                    },
+                    {
+                        num: 7,
+                        title: "Bab 7 — Andai Kamu Tahu",
+                        content: `Di balik candaan dan godaan ramah di antara mereka, Rizal sering kali tertahan. Di dalam hatinya tersimpan satu kalimat yang selalu tertahan di tenggorokan:<br><br><i>"Aku ingin menjadi alasan kamu tersenyum setiap hari, Aisyah."</i><br><br>Namun kalimat itu hanya menjadi gema sunyi yang disimpan Rizal rapat-rapat dalam pikirannya sendiri.`
+                    }
+                ]
+            },
+            {
+                section: "BAGIAN II — SEMAKIN DEKAT, SEMAKIN TAKUT KEHILANGAN",
+                desc: "Ketika perasaan tumbuh lebih cepat daripada keberanian.",
+                chapters: [
+                    {
+                        num: 8,
+                        title: "Bab 8 — Tempat Favorit Kita",
+                        content: `Sebuah bangku taman di bawah pohon rindang pinggir kota menjadi tempat persembunyian favorit mereka. Di sana, dari atas bukit kecil, mereka menyaksikan lampu-lampu kota mulai menyala.<br><br>Saat Aisyah bercerita dengan antusias tentang masa depannya, Rizal memandangnya dari samping dan berbisik dalam hati, menyertakan dirinya di dalam skenario masa depan tersebut.`
+                    },
+                    {
+                        num: 9,
+                        title: "Bab 9 — Cemburu yang Tak Punya Hak",
+                        content: `Sore itu Rizal melihat Aisyah tertawa bersama seorang pria lain di pelataran kampus. Dada Rizal terasa sesak oleh rasa tidak nyaman yang asing.<br><br>Ia ingin melangkah dan bertanya, tetapi langkahnya terhenti. Rizal tersadar bahwa ia belum memberikan status apa pun pada Aisyah. Ia tak punya hak untuk cemburu.`
+                    },
+                    {
+                        num: 10,
+                        title: "Bab 10 — Kamu Nyaman Denganku, Bukan?",
+                        content: `Saat mereka duduk berdua di sebuah kedai kopi, Aisyah menatap mata Rizal dan bertanya pelan, "Rizal, kamu nyaman kan jalan sama aku?"<br><br>Rizal mengangguk dan tersenyum, "Sangat nyaman, Syah." Padahal ada beribu kalimat lain yang ingin meluap: bahwa ia tidak hanya nyaman, tapi juga mulai menggantungkan bahagianya pada Aisyah.`
+                    },
+                    {
+                        num: 11,
+                        title: "Bab 11 — Hampir Menjadi Kita",
+                        content: `Suatu malam saat hujan lebat memenjarakan mereka di teras toko, tangan mereka tak sengaja bersentuhan saat memegang cangkir hangat. Aisyah tidak menarik tangannya.<br><br>Mata mereka bertemu dalam keheningan yang sarat arti. Momen itu begitu dekat dengan sebuah pengakuan, namun Rizal menahannya karena keraguan yang tiba-tiba menyerang.`
+                    },
+                    {
+                        num: 12,
+                        title: "Bab 12 — Rahasia di Balik Senyummu",
+                        content: `Rizal mulai menyadari ada guratan lelah di balik senyum ceria Aisyah. Aisyah menanggung beban keluarga dan ekspektasi orang tua yang berat.<br><br>Untuk pertama kalinya, Rizal tidak hanya ingin menjadi teman tertawa Aisyah, tetapi seseorang yang siap menjadi sandaran saat gadis itu ingin menangis.`
+                    },
+                    {
+                        num: 13,
+                        title: "Bab 13 — Janji di Bawah Langit Senja",
+                        content: `Langit jingga memudar menjadi keunguan. "Rizal, janji ya, apapun yang terjadi nanti, kita jangan pernah jadi asing," bisik Aisyah.<br><br>Rizal mengangguk mantap dan menggenggam janji itu seolah-olah janji sederhana itu bisa membentengi mereka dari takdir buruk yang mengintai.`
+                    },
+                    {
+                        num: 14,
+                        title: "Bab 14 — Aku Ingin Memilikimu",
+                        content: `Rizal akhirnya memantapkan hati. Ia tidak bisa lagi menyembunyikan perasaan ini. Ia membeli sebuah hadiah kecil dan merencanakan tempat untuk menyatakan cintanya pada Aisyah.<br><br>Namun, tepat sebelum hari yang ia rencanakan tiba, raut wajah dan sikap Aisyah mulai berubah perlahan.`
+                    }
+                ]
+            },
+            {
+                section: "BAGIAN III — KETIKA TAKDIR MULAI MENJAUHKAN",
+                desc: "Ada hal-hal yang tidak bisa diselesaikan hanya dengan cinta.",
+                chapters: [
+                    {
+                        num: 15,
+                        title: "Bab 15 — Seseorang dari Masa Lalumu",
+                        content: `Masa lalu Aisyah kembali mengetuk pintu. Seseorang yang pernah mengisi hati Aisyah dan mendapat restu penuh dari keluarga Aisyah kini hadir kembali.<br><br>Rizal tertegun sadar bahwa ada celah besar dalam kehidupan Aisyah yang tak pernah mampu ia jangkau.`
+                    },
+                    {
+                        num: 16,
+                        title: "Bab 16 — Pesan yang Tak Lagi Sama",
+                        content: `Balasan pesan singkat dari Aisyah mulai memendek. Tidak ada lagi percakapan acak hingga larut malam. Kata 'iya', 'tidak', atau 'sudah' menggantikan cerita-cerita panjang yang biasa Rizal terima.`
+                    },
+                    {
+                        num: 17,
+                        title: "Bab 17 — Apakah Aku Mengganggumu?",
+                        content: `Tak tahan dengan keheningan ini, Rizal memberanikan diri mengirim pesan: <i>"Syah, apa aku mengganggumu?"</i><br><br>Jawaban Aisyah terkesan biasa saja: <i>"Enggak kok Zal, cuma lagi banyak pikiran."</i> Namun Rizal tahu ada tembok dingin yang mulai terbangun di antara mereka.`
+                    },
+                    {
+                        num: 18,
+                        title: "Bab 18 — Jarak yang Tak Terlihat",
+                        content: `Mereka masih bertemu sesekali, namun kehangatan itu telah menguap. Duduk berhadapan rasanya seperti terpisah oleh samudra yang luas. Rizal merindukan sosok Aisyah yang dulu, sosok yang sebenarnya belum pernah resmi ia miliki.`
+                    },
+                    {
+                        num: 19,
+                        title: "Bab 19 — Aku Mendengar Kabar Itu",
+                        content: `Lewat seorang teman baik mereka, kabar itu akhirnya sampai ke telinga Rizal. Orang tua Aisyah telah menjodohkan Aisyah dengan pria pilihan keluarga.<br><br>Dunia Rizal seketika terasa hening. Penjelasan tentang perubahan sikap Aisyah selama ini terjawab sudah.`
+                    },
+                    {
+                        num: 20,
+                        title: "Bab 20 — Hari Ketika Aku Terlambat",
+                        content: `Rizal berlari mencari Aisyah, berniat menyampaikan seluruh isi hatinya yang tertunda. Namun saat bertemu, mata Aisyah yang sembap menunjukkan bahwa keputusan telah dibuat.<br><br>Rizal terlambat. Waktu tak mau menunggunya sampai ia siap membuktikan keberaniannya.`
+                    },
+                    {
+                        num: 21,
+                        title: "Bab 21 — Untuk Apa Aku Bertahan?",
+                        content: `Malam-malam Rizal diisi dengan pertanyaan tanpa arah. Ia sangat mencintai Aisyah, tetapi memaksakan diri hadir di kehidupan Aisyah saat ini hanya akan menambah beban di pundak gadis itu.`
+                    }
+                ]
+            },
+            {
+                section: "BAGIAN IV — CINTA YANG TAK SEMPAT MENJADI MILIK",
+                desc: "Ketika dua orang harus menerima kenyataan yang tidak mereka inginkan.",
+                chapters: [
+                    {
+                        num: 22,
+                        title: "Bab 22 — Pengakuan di Hari Terakhir",
+                        content: `Di bangku taman favorit mereka untuk terakhir kalinya, Rizal akhirnya mengucapkan kalimat yang tertahan selama bertahun-tahun.<br><br>"Aisyah, aku mencintaimu. Sangat mencintaimu." Pengakuan itu keluar bersama seluruh ketulusan dan sesak di dadanya.`
+                    },
+                    {
+                        num: 23,
+                        title: "Bab 23 — Maaf, Rizal",
+                        content: `Air mata Aisyah menetes. "Maafkan aku, Rizal... Maaf."<br><br>Aisyah tidak menolak perasaan itu karena tidak suka, melainkan karena kewajiban dan takdir keluarga membawanya ke arah yang berbeda. Jawaban yang paling menyakitkan adalah saat mengetahui perasaan mereka sebenarnya sama, namun keadaan tak memberi ruang.`
+                    },
+                    {
+                        num: 24,
+                        title: "Bab 24 — Kita yang Hampir Bersama",
+                        content: `Mengenang setiap kenangan manis terasa kian menyakitkan. Mereka adalah dua orang yang 'hampir bersama'. Dan Rizal menyadari, kata 'hampir' menyisakan luka yang jauh lebih dalam daripada tidak pernah mencoba sama sekali.`
+                    },
+                    {
+                        num: 25,
+                        title: "Bab 25 — Tangis yang Tak Kamu Lihat",
+                        content: `Di hadapan Aisyah, Rizal berusaha tersenyum dan berpura-pura tegar. Namun di dalam kamar yang gelap, pertahanan Rizal runtuh total dalam keheningan malam.`
+                    },
+                    {
+                        num: 26,
+                        title: "Bab 26 — Aku Melepaskanmu, Bukan Melupakanmu",
+                        content: `Rizal mengambil keputusan tersulit dalam hidupnya: berhenti berjuang. Mencintai Aisyah berarti menginginkan kebahagiaannya, meskipun kebahagiaan itu tidak diukir bersamanya.`
+                    },
+                    {
+                        num: 27,
+                        title: "Bab 27 — Hari-Hari Tanpa Aisyah",
+                        content: `Hari-hari berjalan lambat. Ponsel Rizal tak lagi berdering di tengah malam. Ia harus terbiasa membunuh kebiasaan merindukan seseorang yang kini harus menjadi orang asing.`
+                    },
+                    {
+                        num: 28,
+                        title: "Bab 28 — Surat yang Tak Pernah Kukirim",
+                        content: `Rizal menulis sepucuk surat panjang berisi ucapan terima kasih dan doa-doa terbaik untuk Aisyah. Setelah selesai, ia melipatnya dan menyimpannya di laci terkunci. Beberapa perasaan memang cukup dirayakan sendiri.`
+                    }
+                ]
+            },
+            {
+                section: "BAGIAN V — KENANGAN YANG TETAP HIDUP",
+                desc: "Tentang menerima kehilangan dan menemukan kembali diri sendiri.",
+                chapters: [
+                    {
+                        num: 29,
+                        title: "Bab 29 — Kota yang Masih Mengingat Kita",
+                        content: `Berjalan di sudut-sudut kota kini terasa seperti menyusuri galeri kenangan. Setiap sudut jalan, kedai kopi, dan sudut taman menyimpan bayangan Aisyah.`
+                    },
+                    {
+                        num: 30,
+                        title: "Bab 30 — Jika Suatu Hari Kita Bertemu",
+                        content: `Rizal membayangkan jika kelak takdir membenturkan mereka kembali di masa depan. Akankah mereka saling tersenyum mengangguk, atau justru harus berpura-pura tidak pernah saling mengenal?`
+                    },
+                    {
+                        num: 31,
+                        title: "Bab 31 — Kabar tentang Dirimu",
+                        content: `Setahun berlalu. Melalui kabar burung, Rizal mendengar Aisyah kini telah bahagia dengan kehidupan barunya. Senyum kecil terukir di bibir Rizal—senyum tulus mendoakan kebahagiaannya.`
+                    },
+                    {
+                        num: 32,
+                        title: "Bab 32 — Aku Sudah Tidak Menunggumu",
+                        content: `Rizal menyadari hatinya perlahan pulih. Ia tidak lagi menunggu keajaiban atau menoleh ke belakang. Ia melangkah maju membela hidupnya sendiri.`
+                    },
+                    {
+                        num: 33,
+                        title: "Bab 33 — Pertemuan yang Tak Direncanakan",
+                        content: `Takdir memang suka bercanda. Di sebuah toko buku di bandara, mereka berselisih jalan. Rizal melihat Aisyah. Kali ini tidak ada lagi rasa sesak berlebih, hanya kedamaian yang menyelimuti.`
+                    },
+                    {
+                        num: 34,
+                        title: "Bab 34 — Terima Kasih Pernah Hadir",
+                        content: `Mereka sempat bertukar sapa singkat dan cangkir kopi terakhir sebelum penerbangan. Percakapan dewasa tanpa kepahitan, saling berterima kasih atas pelajaran hidup yang berharga.`
+                    },
+                    {
+                        num: 35,
+                        title: "Bab 35 — Untukmu yang Tak Sempat Kumiliki",
+                        content: `Rizal memandang pesawat yang membawa Aisyah pergi melintasi awan. Ia akhirnya menutup lembaran kisah ini dengan lapang dada. Bukan karena rasa cinta itu telah hilang sepenuhnya, melainkan karena ia telah berdamai dengan kenyataan bahwa tidak semua cinta harus berakhir dengan memiliki.<br><br>Aisyah akan selalu menjadi bagian terindah dari perjalanan hidupnya.`
+                    }
+                ]
+            }
+        ];
+
+        // Global App State
+        let currentChapterNum = 1;
+        let fontSizePercent = 100;
+        let isBookmarked = false;
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            renderDrawerList();
+            loadChapter(1);
+        });
+
+        // Render Drawer List
+        function renderDrawerList() {
+            const drawerList = document.getElementById('drawerList');
+            drawerList.innerHTML = '';
+
+            novelData.forEach((sec) => {
+                const sectionEl = document.createElement('div');
+                sectionEl.className = 'mb-6';
+                sectionEl.innerHTML = `
+                    <div class="mb-2">
+                        <h4 class="text-xs font-bold text-rose-400 uppercase tracking-wider">${sec.section}</h4>
+                        <p class="text-[11px] text-slate-400 italic">${sec.desc}</p>
+                    </div>
+                    <div class="space-y-1 pl-1">
+                        ${sec.chapters.map(ch => `
+                            <button onclick="selectChapter(${ch.num})" class="w-full text-left px-3 py-2 rounded-lg text-xs sm:text-sm transition flex items-center justify-between ${ch.num === currentChapterNum ? 'bg-rose-500/20 text-rose-300 font-semibold border border-rose-500/30' : 'text-slate-300 hover:bg-slate-800/60'}">
+                                <span class="truncate">${ch.title}</span>
+                                ${ch.num === currentChapterNum ? '<i class="fa-solid fa-book-open text-xs text-rose-400"></i>' : ''}
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+                drawerList.appendChild(sectionEl);
+            });
+        }
+
+        // Load Specific Chapter
+        function loadChapter(num) {
+            currentChapterNum = num;
+            
+            // Find Chapter and Section Data
+            let foundChapter = null;
+            let foundSection = null;
+
+            for (const sec of novelData) {
+                const match = sec.chapters.find(c => c.num === num);
+                if (match) {
+                    foundChapter = match;
+                    foundSection = sec;
+                    break;
+                }
+            }
+
+            if (!foundChapter) return;
+
+            // Update UI Elements
+            document.getElementById('currentSectionTitle').innerText = foundSection.section;
+            document.getElementById('currentChapterTitle').innerText = foundChapter.title;
+            document.getElementById('chapterContent').innerHTML = foundChapter.content;
+            document.getElementById('chapterIndicator').innerText = `${num} / 35`;
+
+            // Toggle Quote Box at Chapter 35
+            const quoteBox = document.getElementById('quoteBox');
+            if (num === 35) {
+                quoteBox.classList.remove('hidden');
+            } else {
+                quoteBox.classList.add('hidden');
+            }
+
+            // Navigation Buttons State
+            document.getElementById('btnPrevChapter').disabled = (num === 1);
+            document.getElementById('btnNextChapter').disabled = (num === 35);
+
+            // Refresh Drawer Highlight
+            renderDrawerList();
+
+            // Scroll to Top Reader
+            document.getElementById('readerContainer').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Chapter Navigation Next/Prev
+        function navigateChapter(direction) {
+            const target = currentChapterNum + direction;
+            if (target >= 1 && target <= 35) {
+                loadChapter(target);
+            }
+        }
+
+        function selectChapter(num) {
+            loadChapter(num);
+            toggleDrawer();
+        }
+
+        // Toggle Drawer Modal
+        function toggleDrawer() {
+            const drawerContent = document.getElementById('drawerContent');
+            const drawerOverlay = document.getElementById('drawerOverlay');
+
+            if (drawerContent.classList.contains('-translate-x-full')) {
+                drawerContent.classList.remove('-translate-x-full');
+                drawerOverlay.classList.remove('hidden');
+            } else {
+                drawerContent.classList.add('-translate-x-full');
+                drawerOverlay.classList.add('hidden');
+            }
+        }
+
+        // Toggle Bookmark
+        function toggleBookmark() {
+            isBookmarked = !isBookmarked;
+            const icon = document.getElementById('bookmarkIcon');
+            const btn = document.getElementById('btnBookmark');
+
+            if (isBookmarked) {
+                icon.className = 'fa-solid fa-bookmark text-rose-500 text-lg';
+                btn.classList.add('border-rose-500/50', 'bg-rose-950/30');
+            } else {
+                icon.className = 'fa-regular fa-bookmark text-lg';
+                btn.classList.remove('border-rose-500/50', 'bg-rose-950/30');
+            }
+        }
+
+        // Font Size Scale Controller
+        function changeFontSize(delta) {
+            fontSizePercent += delta;
+            if (fontSizePercent < 80) fontSizePercent = 80;
+            if (fontSizePercent > 150) fontSizePercent = 150;
+
+            document.getElementById('fontSizeDisplay').innerText = `${fontSizePercent}%`;
+            document.getElementById('chapterContent').style.fontSize = `${fontSizePercent / 100 * 1.125}rem`;
+        }
+
+        // Alert Close
+        function closeAlert() {
+            document.getElementById('alertBanner').style.display = 'none';
+        }
+
+        // Extra UI Placeholders
+        function openSettings() {
+            alert('Menu Pengaturan Layout & Tampilan');
+        }
+
+        function toggleReaderMode() {
+            document.body.classList.toggle('px-3');
+            document.getElementById('readerContainer').classList.toggle('max-w-none');
+        }
+
+        function toggleTheme() {
+            alert('Mode Malam aktif secara bawaan.');
+        }
+
+        // Download Modals Logic
+        function downloadNovelModal() {
+            document.getElementById('downloadModal').classList.remove('hidden');
+        }
+
+        function closeDownloadModal() {
+            document.getElementById('downloadModal').classList.add('hidden');
+        }
+
+        // Download Novel as Plain Text
+        function downloadAsTXT() {
+            let fullText = `UNTUKMU YANG TAK SEMPAT KUMILIKI\n`;
+            fullText += `Penulis: Jalon Starboy\n`;
+            fullText += `Genre: Romance, Sad Romance, Drama, Slice of Life\n`;
+            fullText += `Tokoh Utama: Rizal dan Aisyah\n\n`;
+            fullText += `=========================================\n\n`;
+
+            novelData.forEach(sec => {
+                fullText += `\n--- ${sec.section} ---\n`;
+                fullText += `${sec.desc}\n\n`;
+
+                sec.chapters.forEach(ch => {
+                    fullText += `\n${ch.title}\n`;
+                    fullText += `${ch.content.replace(/<br\s*[\/]?>/gi, "\n")}\n\n`;
+                });
+            });
+
+            fullText += `\n=========================================\n`;
+            fullText += `INTI NOVEL:\n"Aisyah, jika suatu hari kamu bertanya siapa yang pernah mencintaimu dengan tulus, mungkin namaku tidak akan pernah kamu sebut. Namun, aku akan selalu mengingatmu sebagai seseorang yang pernah membuatku percaya bahwa kebahagiaan bisa sesederhana melihat satu nama muncul di layar ponselku." ❤️\n`;
+
+            const blob = new Blob([fullText], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'Untukmu_Yang_Tak_Sempat_Kumiliki_JalonStarboy.txt';
+            link.click();
+            closeDownloadModal();
+        }
+
+        // Download Novel as Runnable Web App HTML
+        function downloadAsHTML() {
+            const blob = new Blob([document.documentElement.outerHTML], { type: 'text/html;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'Untukmu_Yang_Tak_Sempat_Kumiliki_Offline.html';
+            link.click();
+            closeDownloadModal();
+        }
+    </script>
+</body>
+</html>
